@@ -7,6 +7,10 @@
       "online": true
     }
   ],
-  "extensions": [
+  "modals": [
+    {
+      "name": "annotation-editor-modal",
+      "component": "annotationEditorModal"
+    }
   ]
 }
