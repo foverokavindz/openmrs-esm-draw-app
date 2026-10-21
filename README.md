@@ -20,6 +20,7 @@ Once started, your module will be available at:
 - ✅ TypeScript configuration
 - ✅ Vitest testing setup
 - ✅ ESLint + Prettier
+- ✅ Storybook for component development
 
 ## Learn more
 
@@ -73,7 +74,34 @@ yarn lint
 
 # Format code
 yarn prettier
+
+# Start Storybook
+yarn storybook
+
+# Build a static Storybook
+yarn build-storybook
 ```
+
+### Developing components in Storybook
+
+`yarn storybook` serves the component explorer on
+**http://localhost:6006**. Stories live next to the components they cover, as
+`src/**/*.stories.tsx`; `src/button.stories.tsx` is there as a worked example.
+
+Storybook runs on the [rsbuild builder](https://storybook.rsbuild.rs/) so it
+shares rspack with `yarn build`. Two things in `.storybook/` exist to stand in
+for what the app shell normally provides:
+
+- `main.ts` treats every `.scss` file in `src/` as a CSS module, matching
+  `openmrs/default-rspack-config`. Stylesheets from dependencies stay global.
+- `preview.tsx` initialises i18next from `translations/en.json` and loads the
+  Carbon stylesheet, so `useTranslation()` and Carbon components behave as they
+  do in the SPA.
+
+Modules that import `@openmrs/esm-framework` need its backing services, which
+Storybook doesn't run. Mock those calls in the story with
+[`beforeEach`](https://storybook.js.org/docs/writing-stories/mocking-data-and-modules/mocking-modules)
+rather than reaching for the framework's vitest mock, which isn't browser-safe.
 
 ### Setting up source path aliases
 
