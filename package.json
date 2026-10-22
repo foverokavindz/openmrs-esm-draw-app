@@ -45,7 +45,10 @@
     "src"
   ],
   "dependencies": {
-    "@carbon/react": "^1.83.0"
+    "@carbon/react": "^1.83.0",
+    "react-filerobot-image-editor": "4.9.1",
+    "react-konva": "18.2.16",
+    "styled-components": "5.3.10"
   },
   "peerDependencies": {
     "@carbon/react": "1.x",
