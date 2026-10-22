@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Layer, Tile } from '@carbon/react';
+import { InlineLoading, Layer, Tile } from '@carbon/react';
 import styles from './draw.scss';
 
 const AnnotationEditor = React.lazy(() => import('./annotation-editor/annotation-editor.component'));
@@ -17,11 +17,13 @@ const Draw: React.FC = () => {
         </Tile>
       </Layer>
       <div className={styles.editor}>
-        <AnnotationEditor
-          source="https://scaleflex.airstore.io/demo/stephen-walker-unsplash.jpg"
-          previewPixelRatio={4}
-          savingPixelRatio={window.devicePixelRatio}
-        />
+        <Suspense fallback={<InlineLoading description={t('loadingEditor', 'Loading editor…')} />}>
+          <AnnotationEditor
+            source="https://scaleflex.airstore.io/demo/stephen-walker-unsplash.jpg"
+            previewPixelRatio={4}
+            savingPixelRatio={window.devicePixelRatio}
+          />
+        </Suspense>
       </div>
     </div>
   );
