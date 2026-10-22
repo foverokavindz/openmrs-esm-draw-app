@@ -10,6 +10,7 @@ const AnnotationEditor = React.lazy(() => import('./annotation-editor.component'
 
 interface AnnotationEditorWorkspaceProps {
   src: string;
+  annotatedSrc?: string;
   title?: string;
   onSave: (result: AnnotatedImage) => void;
 }
@@ -23,7 +24,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
 
   if (!workspaceProps) return null;
 
-  const { src, title, onSave } = workspaceProps;
+  const { src, annotatedSrc, title, onSave } = workspaceProps;
 
   const workSpaceTitle = title ? `${t('annotate', 'Annotate')} ${title}` : `${t('annotateImage', 'Annotate Image')}`;
 
@@ -52,7 +53,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
         <div className={styles.editor}>
           <Suspense fallback={<InlineLoading description={t('loadingEditor', 'Loading editor…')} />}>
             <AnnotationEditor
-              source={src}
+              source={annotatedSrc || src}
               getCurrentImgDataFnRef={getCurrentImgDataFnRef}
               savingPixelRatio={1}
               previewPixelRatio={window.devicePixelRatio}
