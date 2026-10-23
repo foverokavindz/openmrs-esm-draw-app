@@ -22,6 +22,7 @@ export default defineConfig({
         '**/node_modules/**',
         '**/vendor/**',
         '**/src/**/*.test.*',
+        '**/src/**/*.stories.*',
         '**/src/declarations.d.ts',
         '**/e2e/**',
         'src/index.ts',
