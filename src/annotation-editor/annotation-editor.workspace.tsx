@@ -1,6 +1,6 @@
 import React, { Suspense, useRef } from 'react';
 import { Button, ButtonSet, InlineLoading } from '@carbon/react';
-import { type AnnotatedImage } from './annotation-editor-types';
+import { type AnnotatedAttachment } from './annotation-editor-types';
 import styles from './annotation-editor.scss';
 import { Workspace2, type Workspace2DefinitionProps } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
@@ -9,22 +9,22 @@ import { type getCurrentImgDataFunction } from 'react-filerobot-image-editor';
 const AnnotationEditor = React.lazy(() => import('./annotation-editor.component'));
 
 interface AnnotationEditorWorkspaceProps {
-  src: string;
-  annotatedSrc?: string;
+  templateSrc: string;
+  annotatedTemplateSrc?: string;
   title?: string;
-  onSave: (result: AnnotatedImage) => void;
+  onSave: (annotatedAttachment: AnnotatedAttachment) => void;
 }
 
 const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEditorWorkspaceProps>> = ({
   workspaceProps,
   closeWorkspace,
 }) => {
-  const getCurrentImgDataFnRef = useRef<getCurrentImgDataFunction | undefined>(undefined);
   const { t } = useTranslation();
+  const getCurrentImgDataFnRef = useRef<getCurrentImgDataFunction | undefined>(undefined);
 
   if (!workspaceProps) return null;
 
-  const { src, annotatedSrc, title, onSave } = workspaceProps;
+  const { templateSrc, annotatedTemplateSrc, title, onSave } = workspaceProps;
 
   const workSpaceTitle = title ? `${t('annotate', 'Annotate')} ${title}` : `${t('annotateImage', 'Annotate Image')}`;
 
@@ -41,7 +41,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
       fileName: `${imageData.name}.${imageData.extension}`,
       fileType: 'image',
       fileDescription: '',
-      // status: 'uploading',
+      status: 'uploading',
     });
 
     closeWorkspace({ discardUnsavedChanges: true });
@@ -53,7 +53,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
         <div className={styles.editor}>
           <Suspense fallback={<InlineLoading description={t('loadingEditor', 'Loading editor…')} />}>
             <AnnotationEditor
-              source={annotatedSrc || src}
+              source={annotatedTemplateSrc || templateSrc}
               getCurrentImgDataFnRef={getCurrentImgDataFnRef}
               savingPixelRatio={1}
               previewPixelRatio={window.devicePixelRatio}

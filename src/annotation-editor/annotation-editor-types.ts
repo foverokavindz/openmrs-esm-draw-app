@@ -1,9 +1,9 @@
-export interface AnnotatedImage {
+export interface AnnotatedAttachment {
   base64Content: string;
   fileName: string;
   fileType: string;
   fileDescription: string;
-  // status?: 'uploading' | 'complete';
+  status?: 'uploading' | 'complete';
 }
 
 export interface EditedImageObject {
