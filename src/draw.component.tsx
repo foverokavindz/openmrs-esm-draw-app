@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InlineLoading, Layer, Tile } from '@carbon/react';
 import styles from './draw.scss';
@@ -6,6 +6,7 @@ import styles from './draw.scss';
 const AnnotationEditor = React.lazy(() => import('./annotation-editor/annotation-editor.component'));
 
 const Draw: React.FC = () => {
+  const annotatioNotesRef = useRef<HTMLTextAreaElement>(null);
   const { t } = useTranslation();
 
   return (
@@ -22,6 +23,8 @@ const Draw: React.FC = () => {
             source="https://scaleflex.airstore.io/demo/stephen-walker-unsplash.jpg"
             previewPixelRatio={4}
             savingPixelRatio={window.devicePixelRatio}
+            annotationNotesRef={annotatioNotesRef}
+            annotationNotes={''}
           />
         </Suspense>
       </div>
