@@ -8,7 +8,7 @@ import styles from './annotation-editor.scss';
 
 const AnnotationEditor = React.lazy(() => import('./annotation-editor.component'));
 
-interface AnnotationEditorWorkspaceProps {
+export interface AnnotationEditorWorkspaceProps {
   templateSrc: string;
   annotatedTemplateSrc?: string;
   title?: string;
