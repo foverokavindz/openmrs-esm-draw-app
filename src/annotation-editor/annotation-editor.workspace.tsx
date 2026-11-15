@@ -20,7 +20,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
   closeWorkspace,
 }) => {
   const { t } = useTranslation();
-  const getEditedImageDataFuntionRef = useRef<getCurrentImgDataFunction | undefined>(undefined);
+  const getEditedImageDataFunctionRef = useRef<getCurrentImgDataFunction | undefined>(undefined);
 
   if (!workspaceProps) return null;
 
@@ -29,7 +29,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
   const workspaceTitle = title ? `${t('annotate', 'Annotate')} ${title}` : `${t('annotateImage', 'Annotate Image')}`;
 
   const handleSave = () => {
-    const getImgData = getEditedImageDataFuntionRef.current;
+    const getImgData = getEditedImageDataFunctionRef.current;
     if (!getImgData) return;
 
     const { imageData } = getImgData({ name: 'annotation', extension: 'png' });
@@ -54,7 +54,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
           <Suspense fallback={<InlineLoading description={t('loadingEditor', 'Loading editor…')} />}>
             <AnnotationEditor
               source={annotatedTemplateSrc || templateSrc}
-              getCurrentImgDataFnRef={getEditedImageDataFuntionRef}
+              getCurrentImgDataFnRef={getEditedImageDataFunctionRef}
               savingPixelRatio={1}
               previewPixelRatio={window.devicePixelRatio}
             />
