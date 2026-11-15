@@ -26,7 +26,9 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
 
   const { templateSrc, annotatedTemplateSrc, title, onSave } = workspaceProps;
 
-  const workspaceTitle = title ? `${t('annotate', 'Annotate')} ${title}` : `${t('annotateImage', 'Annotate Image')}`;
+  const workspaceTitle = title
+    ? t('annotateTitle', 'Annotate {{title}}', { title })
+    : t('annotateImage', 'Annotate image');
 
   const handleSave = () => {
     const getImgData = getEditedImageDataFuntionRef.current;
