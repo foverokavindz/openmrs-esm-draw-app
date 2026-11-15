@@ -6,6 +6,12 @@ const path = require('path');
 // hint just adds noise on every build. Disable it.
 config.overrides.performance = { hints: false };
 
+// react-konva (used by Filerobot) depends on react-reconciler. In dev mode, rspack resolves
+// the reconciler's development build, which expects React's dev-only internals. The app shell
+// shares the production build of React, so the dev reconciler crashes at runtime
+// ("Cannot read properties of undefined (reading 'isBatchingLegacy')").
+// Force the production reconciler so it matches the shell's React. Production builds already
+// use it, so this only affects the dev server.
 const reconcilerDir = path.dirname(require.resolve('react-reconciler/package.json'));
 
 config.additionalConfig.resolve = {
