@@ -28,7 +28,6 @@ function renderWorkspace(workspaceProps: Partial<AnnotationEditorWorkspaceProps>
     workspaceName: 'annotation-editor-workspace',
     workspaceProps: {
       templateSrc: '/images/body-diagram.png',
-      title: '',
       onSave,
       ...workspaceProps,
     },
@@ -68,7 +67,7 @@ describe('AnnotationEditorWorkspace', () => {
 
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(mockGetCurrentImgData).toHaveBeenCalledWith({ name: 'annotation', extension: 'png' });
+    expect(mockGetCurrentImgData).toHaveBeenCalledWith({});
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(onSave).toHaveBeenCalledWith({
       base64Content: 'data:image/png;base64,abc123',
