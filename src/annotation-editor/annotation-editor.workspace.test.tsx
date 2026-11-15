@@ -50,7 +50,7 @@ describe('AnnotationEditorWorkspace', () => {
   it('shows a default title when none is given', async () => {
     renderWorkspace();
 
-    expect(screen.getByRole('heading', { name: 'Annotate Image' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Annotate image' })).toBeInTheDocument();
     expect(await screen.findByTestId('annotation-editor')).toBeInTheDocument();
   });
 

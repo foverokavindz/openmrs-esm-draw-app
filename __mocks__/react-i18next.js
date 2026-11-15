@@ -28,12 +28,22 @@ const renderNodes = (reactNodes) => {
   });
 };
 
+const useMock = [(key) => key, {}];
+
+useMock.t = (key, defaultValue, options = {}) => {
+  let translatedString = defaultValue || key;
+  Object.entries(options).forEach(([k, v]) => {
+    if (key !== 'interpolation') {
+      translatedString = translatedString.replace(new RegExp(`{{${k}}}`, 'g'), v);
+    }
+  });
+
+  return translatedString;
+};
+
+useMock.i18n = { language: 'en_US' };
+
 module.exports = {
-  useTranslation: () => ({
-    t: (key, options) => (typeof options === 'string' ? options : options?.defaultValue) ?? key,
-    i18n: {
-      changeLanguage: () => new Promise(() => {}),
-    },
-  }),
+  useTranslation: () => useMock,
   Trans: ({ children }) => React.createElement(React.Fragment, null, renderNodes(children)),
 };
