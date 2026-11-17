@@ -1,10 +1,10 @@
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type getCurrentImgDataFunction } from 'react-filerobot-image-editor';
 import { Button, ButtonSet, InlineLoading } from '@carbon/react';
 import { Workspace2, type Workspace2DefinitionProps } from '@openmrs/esm-framework';
 import { type AnnotatedAttachment } from './annotation-editor-types';
 import styles from './annotation-editor.workspace.scss';
+import { type AnnotationEditorHandle } from './annotation-editor.component';
 
 const AnnotationEditor = React.lazy(() => import('./annotation-editor.component'));
 
@@ -20,9 +20,9 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
   workspaceProps,
   closeWorkspace,
 }) => {
-  const getEditedImageDataFunctionRef = useRef<getCurrentImgDataFunction | undefined>(undefined);
-  const annotationCommentsRef = useRef<HTMLTextAreaElement>(null);
+  const annotationEditorRef = useRef<AnnotationEditorHandle>();
   const { t } = useTranslation();
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
 
   if (!workspaceProps) return null;
 
@@ -33,10 +33,10 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
     : t('annotateImage', 'Annotate image');
 
   const handleSave = () => {
-    const getImgData = getEditedImageDataFunctionRef.current;
-    if (!getImgData) return;
+    const annotatedData = annotationEditorRef.current?.getAnnotatedData();
+    if (!annotatedData) return;
 
-    const { imageData } = getImgData({});
+    const { imageData, comments } = annotatedData;
 
     const mimeType = imageData.mimeType ?? 'image/png';
 
@@ -44,7 +44,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
       base64Content: imageData.imageBase64 ?? imageData.imageCanvas?.toDataURL(mimeType) ?? '',
       fileName: `${title ?? imageData.name}.${imageData.extension}`,
       fileType: 'image',
-      fileDescription: annotationCommentsRef.current?.value ?? '',
+      fileDescription: comments,
       status: 'uploading',
     });
 
@@ -52,17 +52,19 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
   };
 
   return (
-    <Workspace2 title={workspaceTitle} hasUnsavedChanges={false}>
+    <Workspace2 title={workspaceTitle} hasUnsavedChanges={hasUnsavedChanges}>
       <div className={styles.container}>
         <div className={styles.editorContainer}>
           <Suspense fallback={<InlineLoading description={t('loadingEditor', 'Loading editor…')} />}>
             <AnnotationEditor
-              source={annotatedTemplateSrc || templateSrc}
-              getCurrentImgDataFnRef={getEditedImageDataFunctionRef}
+              editorState={{
+                annotationTemplateSrc: annotatedTemplateSrc || templateSrc,
+                annotationComments: annotationComments,
+              }}
+              annotationEditorRef={annotationEditorRef}
               savingPixelRatio={1}
               previewPixelRatio={window.devicePixelRatio}
-              annotationCommentsRef={annotationCommentsRef}
-              annotationComments={annotationComments}
+              onUnsavedChangesChange={setHasUnsavedChanges}
             />
           </Suspense>
         </div>
@@ -70,7 +72,7 @@ const AnnotationEditorWorkspace: React.FC<Workspace2DefinitionProps<AnnotationEd
           <Button kind="secondary" onClick={() => closeWorkspace()}>
             {t('cancel', 'Cancel')}
           </Button>
-          <Button kind="primary" onClick={() => handleSave()}>
+          <Button kind="primary" disabled={!hasUnsavedChanges} onClick={() => handleSave()}>
             {t('save', 'Save')}
           </Button>
         </ButtonSet>

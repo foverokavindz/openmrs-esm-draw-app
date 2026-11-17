@@ -1,3 +1,4 @@
+@use '@carbon/layout';
 @use '@openmrs/esm-styleguide/src/vars' as *;
 
 .editorWrapper {
@@ -8,7 +9,22 @@
     display: none;
   }
 
+  :global(.FIE_tabs_toggle_btn) {
+    display: none;
+  }
+
+  :global(.FIE_topbar-reset-button) {
+    display: none;
+  }
+
   :global(.FIE_canvas-node) {
     background: $ui-01;
   }
+}
+
+.clearAllButton {
+  position: absolute;
+  top: layout.$spacing-05;
+  left: layout.$spacing-05;
+  z-index: 10;
 }

@@ -5,9 +5,10 @@ import styles from './annotation-comments.component.scss';
 
 interface AnnotationCommentsProps {
   value?: string;
+  onChange?: () => void;
 }
 
-const AnnotationComments = forwardRef<HTMLTextAreaElement, AnnotationCommentsProps>(({ value = '' }, ref) => {
+const AnnotationComments = forwardRef<HTMLTextAreaElement, AnnotationCommentsProps>(({ value = '', onChange }, ref) => {
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const { t } = useTranslation();
 
@@ -24,6 +25,7 @@ const AnnotationComments = forwardRef<HTMLTextAreaElement, AnnotationCommentsPro
           placeholder={t('enterYourComment', 'Enter your comment...')}
           labelText=""
           defaultValue={value}
+          onChange={onChange}
         />
       </div>
     </div>
